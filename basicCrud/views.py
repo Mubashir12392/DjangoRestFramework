@@ -1,14 +1,17 @@
 from django.shortcuts import HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+from rest_framework.views import APIView
+from rest_framework import status
 
 from .models import Item
 from .serializers import ItemSerializer
 
 # Create your views here.
 
-# We are using simple Function based view for Django Rest Framework
+# __________________________________________ Function Based View_______________________
+
+
 # Using @api_view because we want to be able to POST to this view from clients that won't have a CSRF token
 
 # -----CRUD (Retrieve, Create)-----
@@ -19,17 +22,15 @@ def item_list(request):
     if request.method == 'GET':
         items = Item.objects.all()
         serializer = ItemSerializer(items, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST':
         
         serializer = ItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-    
-    
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
 # ----CRUD (Update , Delete)
@@ -50,9 +51,50 @@ def item_detail(request, pk):
         serializer = ItemSerializer(item, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
         item.delete()
-        return HttpResponse(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+# ________________________________________________ Class Based View _____________________________________
+
+class MyItem(APIView):
+    def get(self, request, pk=None):
+        id = pk
+        if id is not None:
+            item = Item.objects.get(id=id)
+            serializer = ItemSerializer(item)
+            return Response(serializer.data)
+        else:
+            items = Item.objects.all()
+            serializer = ItemSerializer(items, many=True)
+            return Response(serializer.data)
+        
+    def post(self, request):
+        serializer = ItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    def put(self, request, pk):
+        try:
+            item = Item.objects.get(pk=pk)
+        except Item.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = ItemSerializer(item, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self,request, pk):
+        item = Item.objects.get(pk=pk)
+        item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+# _____________________________________ Generic Views_________________________________
