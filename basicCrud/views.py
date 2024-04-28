@@ -2,7 +2,7 @@ from django.shortcuts import HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView,CreateAPIView,UpdateAPIView,DestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView,CreateAPIView,UpdateAPIView,DestroyAPIView, ListCreateAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import status
 
 from .models import Item
@@ -122,5 +122,22 @@ class UpdateItem(UpdateAPIView):
     
 # ----CRUD (Delete)
 class DeleteItem(DestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    
+    
+class ReadCreateItem(ListCreateAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    
+class ReadSingleUpdateItem(RetrieveUpdateAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    
+class ReadSingleDeleteItem(RetrieveDestroyAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    
+class ReadUpdateDeleteItem(RetrieveUpdateDestroyAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
