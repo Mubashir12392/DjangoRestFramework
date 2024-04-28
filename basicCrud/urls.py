@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import item_list, item_detail, MyItem
+from .views import item_list, item_detail, MyItem,ListItem,ReadItem,CreateItem,UpdateItem,DeleteItem
 
 urlpatterns = [
     # ------ Function Based View------
@@ -8,12 +8,16 @@ urlpatterns = [
     
     
     # ------- Class Based View----
-    path('',MyItem.as_view()),
-    path('item/<int:pk>/', MyItem.as_view()),
+    # path('',MyItem.as_view()),
+    # path('item/<int:pk>/', MyItem.as_view()),
     
     
     # ------- Generic View-----
-    path()
+    path('',ListItem.as_view()),
+    path('item/<int:pk>/',ReadItem.as_view()),
+    path('createitem/',CreateItem.as_view()),
+    path('updateitem/<int:pk>/',UpdateItem.as_view()),
+    path('deleteitem/<int:pk>/',DeleteItem.as_view())
     
     
     
