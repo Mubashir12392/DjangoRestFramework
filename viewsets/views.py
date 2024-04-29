@@ -7,7 +7,7 @@ from basicCrud.serializers import ItemSerializer
 
 # Create your views here.
 
-# _____________________________Simple View Set____________________
+# _____________________________View Set____________________
 
 class ItemViewSet(viewsets.ViewSet):
     
@@ -56,3 +56,8 @@ class ItemModelViewSet(viewsets.ModelViewSet):
     
     
     
+# __________________________________________Read only Model View Set_______________________
+
+class ItemReadOnlyMVSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
