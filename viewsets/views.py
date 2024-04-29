@@ -6,6 +6,9 @@ from basicCrud.models import Item
 from basicCrud.serializers import ItemSerializer
 
 # Create your views here.
+
+# _____________________________Simple View Set____________________
+
 class ItemViewSet(viewsets.ViewSet):
     
     def list(self, request):
@@ -44,3 +47,12 @@ class ItemViewSet(viewsets.ViewSet):
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
+        
+# __________________________________________ Model View Set________________________________
+
+class ItemModelViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    
+    
+    
