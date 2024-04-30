@@ -8,7 +8,7 @@ class Item(models.Model):
     company = models.CharField(max_length=50, null=True)
     owner = models.CharField(max_length=50, null=True)
     created_at = models.DateField(auto_now_add=True)
-    expiry_data = models.DateField(null=True)
+    expiry_data = models.DateField(blank=True, null=True)
     
     def __str__(self) -> str:
         return self.name
