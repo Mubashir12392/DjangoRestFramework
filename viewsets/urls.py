@@ -11,7 +11,7 @@ router.register(r"items", ItemViewSet, basename="item")
 router.register(r"modelitems", ItemModelViewSet, basename="modelitem")
 router.register(r"readOnlyMVitems", ItemReadOnlyMVSet, basename="readOnlyMVitem")
 
-router.register(r"items", ItemGenericViewSet)
+# router.register(r"items", ItemGenericViewSet)
 
 
 # Add router url in url patterns
