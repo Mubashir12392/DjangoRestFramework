@@ -4,16 +4,16 @@ from rest_framework.decorators import (
     api_view,
 )
 
-from basicCrud.models import Item
+from basicCrud.models import MyItem
 from basicCrud.serializers import ItemSerializer
 
 
 @api_view(["GET"])
 def testing_api(request):
-    query_param = int(request.query_params.get("id"))
+    query_param = request.query_params.get("id")
     try:
-        item_obj = Item.objects.get(id=query_param)
-    except Item.DoesNotExist:
+        item_obj = MyItem.objects.get(id=query_param)
+    except MyItem.DoesNotExist:
         return Response(
             {"message": f'Item "{query_param}" not found'},
             status=status.HTTP_404_NOT_FOUND,
@@ -27,7 +27,7 @@ def testing_api(request):
 def post_testing_api(request):
     data = request.data
     try:
-        obj = Item.objects.create(**data)
+        obj = MyItem.objects.create(**data)
         serializer = ItemSerializer(instance=obj)
         if serializer.data:
             return Response(serializer.data)
@@ -50,6 +50,6 @@ def update_testing_api(request):
 @api_view(["DELETE"])
 def delete_testing_api(request):
     query_param = int(request.query_params.get("id"))
-    obj = Item.objects.get(id=query_param)
+    obj = MyItem.objects.get(id=query_param)
     obj.delete()
     return Response({"message": "Record is deleted successfully"})
