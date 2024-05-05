@@ -15,7 +15,7 @@ from rest_framework.generics import (
 )
 from rest_framework import status
 
-from .models import Item
+from .models import MyItem
 from .serializers import ItemSerializer
 
 # Create your views here.
@@ -32,7 +32,7 @@ from .serializers import ItemSerializer
 def item_list(request):
 
     if request.method == "GET":
-        items = Item.objects.all()
+        items = MyItem.objects.all()
         serializer = ItemSerializer(items, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -52,8 +52,8 @@ def item_list(request):
 def item_detail(request, pk):
 
     try:
-        item = Item.objects.get(pk=pk)
-    except Item.DoesNotExist:
+        item = MyItem.objects.get(pk=pk)
+    except MyItem.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == "GET":
@@ -75,15 +75,15 @@ def item_detail(request, pk):
 # ________________________________________________ Class Based View _____________________________________
 
 
-class MyItem(APIView):
+class Item(APIView):
     def get(self, request, pk=None):
         id = pk
         if id is not None:
-            item = Item.objects.get(id=id)
+            item = MyItem.objects.get(id=id)
             serializer = ItemSerializer(item)
             return Response(serializer.data)
         else:
-            items = Item.objects.all()
+            items = MyItem.objects.all()
             serializer = ItemSerializer(items, many=True)
             return Response(serializer.data)
 
@@ -95,8 +95,8 @@ class MyItem(APIView):
 
     def put(self, request, pk):
         try:
-            item = Item.objects.get(pk=pk)
-        except Item.DoesNotExist:
+            item = MyItem.objects.get(pk=pk)
+        except MyItem.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = ItemSerializer(item, data=request.data)
@@ -106,7 +106,7 @@ class MyItem(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        item = Item.objects.get(pk=pk)
+        item = MyItem.objects.get(pk=pk)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -116,49 +116,49 @@ class MyItem(APIView):
 
 # ----CRUD (Read--Manyitems)
 class ListItem(ListAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 # ----CRUD (Read--Singleitem)
 class ReadItem(RetrieveAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 # ----CRUD (Create)
 class CreateItem(CreateAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 # ----CRUD (Update)
 class UpdateItem(UpdateAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 # ----CRUD (Delete)
 class DeleteItem(DestroyAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 class ReadCreateItem(ListCreateAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 class ReadSingleUpdateItem(RetrieveUpdateAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 class ReadSingleDeleteItem(RetrieveDestroyAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
 class ReadUpdateDeleteItem(RetrieveUpdateDestroyAPIView):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer

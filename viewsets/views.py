@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework import viewsets
 
 
-from basicCrud.models import Item
+from basicCrud.models import MyItem
 from basicCrud.serializers import ItemSerializer
 
 # Create your views here.
@@ -14,14 +14,14 @@ from basicCrud.serializers import ItemSerializer
 class ItemViewSet(viewsets.ViewSet):
 
     def list(self, request):
-        items = Item.objects.all()
+        items = MyItem.objects.all()
         serializer = ItemSerializer(items, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         try:
-            item = Item.objects.get(pk=pk)
-        except Item.DoesNotExist:
+            item = MyItem.objects.get(pk=pk)
+        except MyItem.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = ItemSerializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -35,8 +35,8 @@ class ItemViewSet(viewsets.ViewSet):
 
     def update(self, request, pk=None):
         try:
-            item = Item.objects.get(pk=pk)
-        except Item.DoesNotExist:
+            item = MyItem.objects.get(pk=pk)
+        except MyItem.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = ItemSerializer(item, data=request.data)
         if serializer.is_valid():
@@ -45,7 +45,7 @@ class ItemViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        item = Item.objects.get(pk=pk)
+        item = MyItem.objects.get(pk=pk)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -54,7 +54,7 @@ class ItemViewSet(viewsets.ViewSet):
 
 
 class ItemModelViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
@@ -62,7 +62,7 @@ class ItemModelViewSet(viewsets.ModelViewSet):
 
 
 class ItemReadOnlyMVSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
 
@@ -70,7 +70,7 @@ class ItemReadOnlyMVSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ItemGenericViewSet(viewsets.GenericViewSet):
-    queryset = Item.objects.all()
+    queryset = MyItem.objects.all()
     serializer_class = ItemSerializer
 
     def list(self, request):
